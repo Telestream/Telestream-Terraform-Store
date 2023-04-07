@@ -5,7 +5,7 @@ provider "azurerm" {
 }
 
 module "bucket" {
-  source       = "../../Bucket"
+  source       = "github.com/Telestream/Telestream-Terraform-Store/AZURE/Bucket"
   bucket_names = ["<replace_with_unique_name_of_bucket>"]
   azurerm_resource_group = {
     name       = "<replace_with_existing_name_for_azurerm_resource_group>"
