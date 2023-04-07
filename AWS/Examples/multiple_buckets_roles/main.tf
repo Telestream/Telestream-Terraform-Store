@@ -11,7 +11,7 @@ variable "bucket_names" {
 }
 module "bucket" {
   count        = length(var.bucket_names)
-  source       = "../../Bucket"
+  source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
   bucket_names = [var.bucket_names[count.index]]
   iam_access = {
     iam_policy_name_prefix = "<replace_with_unique_prefix_for_policy>"

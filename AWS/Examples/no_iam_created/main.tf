@@ -4,7 +4,7 @@ provider "aws" {
 }
 // Will only create an s3 bucket since create_iam is set to false
 module "bucket" {
-  source       = "../../Bucket"
+  source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
   bucket_names = ["<replace_with_unique_name_of_bucket>"]
   iam_access = {
     create_iam = false // flag if not provided will default to true and create iam permissions if false will not create any iam 

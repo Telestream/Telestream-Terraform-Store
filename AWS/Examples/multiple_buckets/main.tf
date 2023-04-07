@@ -6,7 +6,7 @@ provider "aws" {
 Will create as many buckets as in list, and all buckets will share the same role and policy
 */
 module "bucket" {
-  source       = "../../Bucket"
+  source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
   bucket_names = ["<replace_with_unique_name_of_bucket>", "<replace_with_unique_name_of_bucket>", "<replace_with_unique_name_of_bucket>"]
   iam_access = {
     //will create policy and role with provided prefix and append random string afterwards to ensure name is unique

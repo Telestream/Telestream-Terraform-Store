@@ -7,7 +7,7 @@ data "local_file" "pgp_key" {
 }
 
 module "bucket" {
-  source       = "../../Bucket"
+  source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
   bucket_names = ["<replace_with_unique_name_of_bucket>"]
   iam_access = {
     assume_role            = false // flag if not provided will default to true and create iam role
