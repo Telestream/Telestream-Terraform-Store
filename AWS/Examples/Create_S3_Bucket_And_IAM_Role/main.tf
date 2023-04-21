@@ -5,7 +5,7 @@ provider "aws" {
 
 module "bucket" {
   source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
-  bucket_names = ["<replace_with_unique_name_of_bucket>"]
+  bucket_names = ["<replace_with_unique_name_of_bucket>", "<replace_with_unique_name_of_bucket>", "<replace_with_unique_name_of_bucket>"]
   iam_access = {
     iam_policy_name = "<replace_with_unique_name_for_policy>"
     iam_role_name   = "<replace_with_unique_name_for_role>"

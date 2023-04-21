@@ -7,7 +7,7 @@ module "bucket" {
   source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
   bucket_names = ["<replace_with_unique_name_of_bucket>"]
   iam_access = {
-    create_iam = false // flag if not provided will default to true and create iam permissions if false will not create any iam 
+    create_iam = false // if false will not create any iam resources
   }
 }
 
