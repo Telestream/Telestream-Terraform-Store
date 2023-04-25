@@ -1,24 +1,48 @@
+
 # How to Deploy Infrastructure AWS
-Terraform Build Infrastructure Documentation can be found [here][terraform-build-infrastructure]
+Terraform Build Infrastructure Documentation can be found [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build)
 
 # Table of Contents
 1. [Requirements](README.md)
-2. [Copy Module](#copy-a-module)
-3. [Replace values in module](#replace-values-in-module)
+2. [Select Example module](#select-example-module)
+3. [Copy a module](#copy-a-module)
+4. [Creating a Terraform Environment Deployment Folder](#creating-a-terraform-environment-deployment-folder)
+5. [Replace values in example module](#replace-values-in-example-module)
 4. [Initialize the Directory](#initialize-the-directory)
 5. [Terraform Plan](#terraform-plan)
 6. [Create Infrastructure](#create-infrastructure)
 
-[terraform-build-infrastructure]:https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-plan]:https://developer.hashicorp.com/terraform/cli/commands/plan
-[terraform-apply]:https://developer.hashicorp.com/terraform/cli/commands/apply
-[aws-examples]:https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples
-[aws-example]:https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples/iam_role_access
+# Select Example module
+
+Pick an [Example](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples) module that best fits your requirements, the examples bellow will be using Create_S3_Bucket_And_IAM_Role.
+
 # Copy a module
-Copy the module in [Examples][aws-examples] directory that fits your requirements. Example module in examples will be the [iam_role_access][aws-example] module
-# Replace values in module
+
+Copy the main.tf in the[Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples) that you want to use in a safe and secure place since terraform will generate a [state](https://developer.hashicorp.com/terraform/language/state)file. The Terraform state file is a JSON file that contains the current state of the infrastructure resources managed by Terraform. It keeps track of the resources that Terraform created, updated, or destroyed during the last run. The Terraform state file is crucial because it enables Terraform to perform operations like update, destroy, or create resources based on the current state. Without the state file, Terraform would not know which resources to update, destroy or create, making infrastructure management difficult.
+
+<br />
+
+In addition, the Terraform state file allows for collaborative infrastructure management. When multiple team members work on the same infrastructure, the state file serves as a shared record of the current infrastructure state. This allows team members to collaborate effectively and avoid conflicts.
+
+# Creating a Terraform Environment Deployment Folder
+
+To create a new Terraform environment deployment, follow the steps below:
+
+1. Create a new folder and name it `terraform`
+2. Inside the `terraform` folder, create another folder named after the environment you want to deploy to (e.g., sandbox, dev, staging, or prod).
+3. Inside the environment folder, create a new folder to store the Terraform main. The folder name should be descriptive of what the Terraform code does. For example, if you are creating S3 buckets in the cloud, the folder name could be `tcloud-s3-buckets`.
+4. Best practices name the terraform file as main.tf\`. 
+
+By following the above steps, you can create a new Terraform environment deployment folder and organize your Terraform code effectively. Keeping Terraform separate for different environments is a good practice that helps prevent any conflicts and simplifies the deployment process.
+
+<br />
+
+# Replace values in example module
+
+Below is the example `main.tf` for creating a list of AWS S3 buckets and AWS IAM Role that has access to buckets created. Any line 
+
 Original:
+
 ```json
 provider "aws" {
     region  = "<replace_with_region_to_deploy_into>"
@@ -26,7 +50,7 @@ provider "aws" {
 }
 
 module "bucket" {
-    source       = "../../Bucket"
+    source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
     bucket_names = ["<replace_with_unique_name_of_bucket>"]
     iam_access = {
         iam_policy_name  = "<replace_with_unique_name_for_policy>"
@@ -51,15 +75,54 @@ output "iam_role_arn" {
   description = "Amazon Resource Name (ARN) specifying the role."
 }
 ```
+
+
+
+## Use AWS CLI Profile in Modules
+
+Deploying infrastructure using Terraform requires the provider with credentials, documentation can be found [here](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+
+<br />
+
+The Top of the module has a provider field that determines the region and credentials for AWS, that needs to be updated with correct values.
+
+```json
+provider "aws" {
+    region  = "<replace_with_region_to_deploy_into>"
+    profile = "<replace_with_profile_name>"
+}
+```
+
+
+
+<br />
+
 Example:
+
 ```json
 provider "aws" {
     region  = "us-east-1"
-    profile = "telestream-dev"
+    profile = "tcloud-store-prod"
+}
+```
+
+
+
+- region: value is the the region you will build S3 buckets in, so if you enter us-east-1 then the S3 bucket will be in the us-east-1 region. This value is required
+- profile: use the AWS CLI profile name created in previous [page](https://dash.readme.com/project/telestream/v1.2/docs/how-to-configure-aws-cli-profile) terraform will use the profile to interact with AWS
+
+## Replace terraform module inputs:
+
+Example:
+
+```json
+provider "aws" {
+    region  = "us-east-1"
+    profile = "tcloud-store-prod"
 }
 
 module "bucket" {
-    source       = "../../Bucket"
+    source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
     bucket_names = ["fake-bucket-name"]
     iam_access = {
         iam_policy_name  = "tcloud_store_access_policy"
@@ -84,18 +147,33 @@ output "iam_role_arn" {
   description = "Amazon Resource Name (ARN) specifying the role."
 }
 ```
-# Initialize the Directory
+
+
+
+<br />
+
+- bucket_names: Please provide a comma-separated list of names for the AWS S3 buckets you wish to create. Ensure that the names follow the AWS S3 bucket naming convention outlined in the following link: <https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html>
+- iam_policy_name: The name of the IAM policy. Ensure that the names follow the AWS IAM naming convention outlined in the following link: link: <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html>
+- iam_role_name: The name of the IAM role. Ensure that the names follow the AWS IAM naming convention outlined in the following link: <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html>
+
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AWS provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
-- bucket in ../../Bucket
+- bucket in github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket
 
 Initializing the backend...
 
@@ -120,12 +198,23 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 $ 
 ```
-# Terraform Plan
-The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here][terraform-plan]
+
+
+
+<br />
+
+## Terraform Plan
+
+The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/plan)
+
 ```sh
 terraform plan
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform plan
 module.bucket.data.aws_iam_policy_document.policy[0]: Reading...
@@ -422,12 +511,23 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 now.
 $ 
 ```
-# Create Infrastructure
-The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here][terraform-apply]
+
+
+
+<br />
+
+## Create Infrastructure
+
+The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/apply)
+
 ```sh
 terraform apply
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform apply
 module.bucket.data.aws_iam_policy_document.policy[0]: Reading...

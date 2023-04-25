@@ -8,26 +8,35 @@
 # Table of Contents
 1. [Requirements](README.md)
 2. [Initialize the Directory](#initialize-the-directory)
-3. [Update Module](#update-terraform-module-to-use-existing-resouce-name-to-be-imported)
+3. [Update Terraform Module to use Existing Resource Name to be Imported](#update-terraform-module-to-use-existing-resource-name-to-be-imported)
 4. [How to Import Bucket](#how-to-import-bucket)
 5. [How to Import Role](#how-to-import-role)
 6. [How to Import Policy](#how-to-import-policy)
 7. [How to Import User](#how-to-import-user)
+8. [Terraform Apply](#terraform-apply)
 
 ## NOTE: Make sure the aws profile has access to the resources you plan to import
+<br />
 
-# Initialize the Directory
+Go into the directory with the `main.tf`
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AWS provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
-- bucket in ../../Bucket
+- bucket in github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket
 
 Initializing the backend...
 
@@ -54,8 +63,15 @@ $
 ```
 
 
-# Update Terraform Module to use Existing Resouce Name to be Imported
-Copy the module in [Examples][aws-examples] directory that fits your requirements. Example module in examples will be the [iam_role_access][aws-example] moduleiam_role_access) module
+
+<br />
+
+## Update Terraform Module to use Existing Resource Name to be Imported
+
+Copy the module in [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples) directory that fits your requirements. Example module in examples will be the [iam_role_access](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples/iam_role_access) module
+
+For all resources that you want to import to be controlled by terraform, update the `main.tf` file with their existing names instead of new unique names. 
+
 ```json
 provider "aws" {
     region  = "<replace-with-region-to-deploy>"
@@ -63,7 +79,7 @@ provider "aws" {
 }
 
 module "bucket" {
-    source       = "../../Bucket"
+    source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
     bucket_names = ["<replace-with-existing-bucket-name-to-be-imported>"]
     iam_access = {
         iam_policy_name  = "<replace-with-unique-policy-name>"
@@ -88,7 +104,11 @@ output "iam_role_arn" {
   description = "Amazon Resource Name (ARN) specifying the role."
 }
 ```
-exmaple
+
+
+
+Example:
+
 ```json
 provider "aws" {
     region  = "us-east-1"
@@ -96,7 +116,7 @@ provider "aws" {
 }
 
 module "bucket" {
-    source       = "../../Bucket"
+    source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
     bucket_names = ["fake-bucket-name"]
     iam_access = {
         iam_policy_name  = "tcloud_store_access_policy"
@@ -122,13 +142,26 @@ output "iam_role_arn" {
 }
 ```
 
-# How to Import Bucket
-Terraform can import existing infrastructure resources. This functionality lets you bring existing resources under Terraform management.Terraform documentation can be found [here][terraform-import]
-* S3 bucket can be imported using the bucket name
+
+
+<br />
+
+## Terraform Import
+
+Terraform can import existing infrastructure resources. This functionality lets you bring existing resources under Terraform management.Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/import) This is done by using the command terraform import
+
+## How to Import Bucket
+
+- S3 bucket can be imported using the existing bucket name
+
 ```sh
 terraform import module.bucket.aws_s3_bucket.bucket[0] <bucket-name>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import module.bucket.aws_s3_bucket.bucket[0] fake-bucket-name
 module.bucket.aws_s3_bucket.bucket[0]: Importing from ID "fake-bucket-name"...
@@ -144,13 +177,24 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
 $
-``` 
-# How to Import Role
-* IAM Roles can be imported using the role name
+```
+
+
+
+<br />
+
+## How to Import Role
+
+- IAM Roles can be imported using the existing role name
+
 ```sh
 terraform import module.bucket.aws_iam_role.role[0] <role-name>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import module.bucket.aws_iam_role.role[0] tcloud_store_access_role
 module.bucket.data.aws_iam_policy_document.assume_role[0]: Reading...
@@ -170,13 +214,24 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
 $ 
-``` 
-# How to Import Policy
-* IAM Policies can be imported using the arn
+```
+
+
+
+<br />
+
+## How to Import Policy
+
+- IAM Policies can be imported using the existing policy ARN
+
 ```sh
 terraform import module.bucket.aws_iam_policy.policy[0] <policy-arn>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import module.bucket.aws_iam_policy.policy[0] arn:aws:iam::012345678901:policy/tcloud_store_access_policy
 module.bucket.data.aws_iam_policy_document.assume_role[0]: Reading...
@@ -196,14 +251,26 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
 $ 
-``` 
-# How to Import User
-* IAM Users can be imported using the name
-## NOTE access keys can not be imported into terraform so new keys will be generated after running terrafrom apply after importing, but will not delete the existing keys
+```
+
+
+
+<br />
+
+## How to Import User
+
+- IAM Users can be imported using the existing user name
+
+## NOTE access keys can not be imported into terraform so new keys will be generated after running terraform apply after importing, but will not delete the existing keys
+
 ```sh
 terraform import module.bucket.aws_iam_user.user[0] <user-name>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import module.bucket.aws_iam_user.user[0] tcloud_store_access_user
 module.bucket.aws_iam_user.user[0]: Importing from ID "tcloud_store_access_user"...
@@ -220,8 +287,15 @@ your Terraform state and will henceforth be managed by Terraform.
 
 $ 
 ```
-# Terraform Apply
-The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes. After approval it will create infrastructure. Terraform documentation can be found [here][terraform-apply]
+
+
+
+<br />
+
+## Terraform Apply
+
+The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes. After approval it will create infrastructure. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/apply)
+
 ```sh
 terraform apply
 ```

@@ -1,5 +1,7 @@
 # How to Get Values from Output AWS
-Goes over how to extract values from terraform state file [outputs][terraform-output]
+The terraform output command is used to extract the value of an output variable from the state file. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/output)
+<br />
+
 
 # Table of Contents
 1. [Requirements](README.md)
@@ -8,12 +10,16 @@ Goes over how to extract values from terraform state file [outputs][terraform-ou
 [terraform-output]:https://developer.hashicorp.com/terraform/cli/commands/output
 
 # Get terraform outputs
-The terraform output command is used to extract the value of an output variable from the state file. Terraform documentation can be found [here][terraform-output]
-```sh
+Go into the directory with the `main.tf` and `terraform.tfstate` to run the terraform output command. Add -json parameter for a more readable output.
+
+```shell shell
 terraform output -json
 ```
+
+
 Example
-```sh
+
+```shell
 $ terraform output -json
 {
   "bucket_arns": {
@@ -56,9 +62,12 @@ $ terraform output -json
 }
 $ 
 ```
-* **bucket_names** value is a list of the bucket names created
-* **iam_access_key_id** value is the access key needed by telestream store if using Access Key and Secret Key Authorization Method
-* **iam_access_key_secret** value is the secret key needed by telestream store if using Access Key and Secret Key Authorization Method 
-* **iam_role_arn** value is the AWS IAM Role needed by telestream store if using AWS IAM Role Authorization Method
-* **iam_policy_arn** The ARN assigned by AWS to this policy
 
+
+
+- **bucket_names**: The value is a list of the bucket names created
+- **iam_access_key_id**: The value is the access key needed by Telestream store if using Access Key and Secret Key Authorization Method
+- **iam_access_key_secret**: The balue is the secret key needed by Telestream store if using Access Key and Secret Key Authorization Method 
+- **iam_role_arn**: The balue is the AWS IAM Role needed by Telestream store if using AWS IAM Role Authorization Method
+- **iam_policy_arn**: The ARN assigned by AWS to this policy
+- **iam_user_arn**: The ARN assigned by AWS for this user.

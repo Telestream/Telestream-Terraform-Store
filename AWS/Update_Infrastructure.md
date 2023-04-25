@@ -1,23 +1,26 @@
-# How to Update Infrastructure
-Terraform Build Infrastructure Documentation can be found [here][terraform-build-infrastructure]
+# How to Update Infrastructure AWS
+# NOTE if changing the bucket names, terraform will attempt to delete the existing buckets and all objects inside, so be careful and read terraform output on what will be destroyed
 
+Terraform Build Infrastructure Documentation can be found [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build)
+<br />
+
+Go into the directory with the `main.tf` and `terraform.tfstate` to run the terraform destroy command.
 # Table of Contents
 1. [Requirements](README.md)
-3. [Replace values in module](#replace-values-in-module)
+3. [Update values in module](#update-values-in-module)
 4. [Initialize the Directory](#initialize-the-directory)
 5. [Terraform Plan](#terraform-plan)
 6. [Create Infrastructure](#create-infrastructure)
 
-[terraform-build-infrastructure]:https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-plan]:https://developer.hashicorp.com/terraform/cli/commands/plan
-[terraform-apply]:https://developer.hashicorp.com/terraform/cli/commands/apply
-[aws-examples]:https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples
-[aws-example]:https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AWS/Examples/iam_role_access
-# NOTE: if changing the bucket names, terraform will attempt to delete the existing buckets and all objects inside, so be careful and read terraform output on what will be destroyed
-Copy the module in [Examples][aws-examples] directory that fits your requirements. Example module in examples will be the [iam_role_access][aws-example] module
-# Update values in module
+## Update values in module
+
+To update values after deployed, just change values in main.tf to new values you want. Example changing the policy, role name, or bucket names. Changing bucket name will have terraform destroy old buckets and everything in it and create a new bucket, this will result of losing all objects in the s3 bucket. 
+
+<br /> 
+Example bellow will update iam_policy and iam_role name as well as the bucket names.
+
 Original:
+
 ```json
 provider "aws" {
     region  = "us-east-1"
@@ -25,7 +28,7 @@ provider "aws" {
 }
 
 module "bucket" {
-    source       = "../../Bucket"
+    source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
     bucket_names = ["fake-bucket-name"]
     iam_access = {
         iam_policy_name  = "tcloud_store_access_policy"
@@ -50,7 +53,11 @@ output "iam_role_arn" {
   description = "Amazon Resource Name (ARN) specifying the role."
 }
 ```
+
+
+
 Update:
+
 ```json
 provider "aws" {
     region  = "us-east-1"
@@ -58,7 +65,7 @@ provider "aws" {
 }
 
 module "bucket" {
-    source       = "../../Bucket"
+    source       = "github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket"
     bucket_names = ["fake-bucket-name-new"]
     iam_access = {
         iam_policy_name  = "tcloud_store_access_policy_new"
@@ -83,18 +90,29 @@ output "iam_role_arn" {
   description = "Amazon Resource Name (ARN) specifying the role."
 }
 ```
-# Initialize the Directory
+
+
+
+<br />
+
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
-- bucket in ../../Bucket
+- bucket in github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket
 
 Initializing the backend...
 
@@ -119,12 +137,25 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 $ 
 ```
-# Terraform Plan
-The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here][terraform-plan]
+
+
+
+<br />
+
+## Terraform Plan
+
+The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/plan)
+
 ```sh
 terraform plan
 ```
+
+
+
+In the output plan it shows that it will create new infrastructure and destroy old infrastructure by saying `Plan: 6 to add, 0 to change, 6 to destroy.` So use plan to verify expected changes, if you do not mean to destroy anything this is giving you a warning that your action will destroy infrastructure.
+
 Example:
+
 ```sh
 $ terraform plan
 module.bucket.data.aws_iam_policy_document.policy[0]: Reading...
@@ -422,12 +453,23 @@ Note: You didn't use the -out option to save this plan, so Terraform can't guara
 now.
 $ 
 ```
-# Create Infrastructure
-The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here][terraform-apply]
+
+
+
+<br />
+
+## Create Infrastructure
+
+The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/apply)
+
 ```sh
 terraform apply
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform apply
 module.bucket.data.aws_iam_policy_document.policy[0]: Reading...

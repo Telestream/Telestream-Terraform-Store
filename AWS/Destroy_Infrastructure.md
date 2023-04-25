@@ -1,28 +1,35 @@
 
-# How to Destroy Infrastructure
-Terraform Build Infrastructure Documentation can be found [here][terraform-build-infrastructure]
+# How to Destroy Infrastructure AWS
+Terraform Build Infrastructure Documentation can be found [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build)
+<br />
 
+Go into the directory with the `main.tf` and `terraform.tfstate` to run the terraform destroy command.
 # Table of Contents
 1. [Requirements](README.md)
 2. [Initialize the Directory](#initialize-the-directory)
 3. [Destroy Infrastructure](#destroy-infrastructure)
 
-[terraform-build-infrastructure]:https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-destroy]:https://developer.hashicorp.com/terraform/cli/commands/destroy
 
-# Initialize the Directory
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AWS provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
+<br />
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
-- bucket in ../../Bucket
+- bucket in github.com/Telestream/Telestream-Terraform-Store/AWS/Bucket
 
 Initializing the backend...
 
@@ -47,12 +54,29 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 $ 
 ```
-# Destroy Infrastructure
-The terraform destroy command destroys all of the resources being managed by the current working directory and workspace, using state data to determine which real world objects correspond to managed resources. Like terraform apply, it asks for confirmation before proceeding. Terraform documentation can be found [here][terraform-destroy]
+
+
+
+<br />
+
+## Destroy Infrastructure
+
+The terraform destroy command destroys all of the resources being managed by the current working directory and workspace, using state data to determine which real world objects correspond to managed resources. Like terraform apply, it asks for confirmation before proceeding. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/destroy)
+
+<br />
+
+### CAUTION: This will destroy the S3 Bucket and all files inside of it
+
+<br />
+
 ```sh
 terraform destroy
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform destroy
 module.bucket.data.aws_iam_policy_document.policy[0]: Reading...
