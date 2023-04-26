@@ -1,21 +1,28 @@
-# How to Update Infrastructure
-Terraform Build Infrastructure Documentation can be found [here][terraform-build-infrastructure]
+# How to Update Infrastructure AZURE
+# NOTE if changing the bucket names, terraform will attempt to delete the existing buckets and all objects inside, so be careful and read terraform plan on what will be destroyed
+
+Terraform Build Infrastructure Documentation can be found [here](https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build)
 
 # Table of Contents
 1. [Requirements](README.md)
-3. [Replace values in module](#replace-values-in-module)
+3. [Update values in module](#update-values-in-module)
 4. [Initialize the Directory](#initialize-the-directory)
 5. [Terraform Plan](#terraform-plan)
 6. [Create Infrastructure](#create-infrastructure)
 
-[terraform-build-infrastructure]:https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-plan]:https://developer.hashicorp.com/terraform/cli/commands/plan
-[terraform-apply]:https://developer.hashicorp.com/terraform/cli/commands/apply
-# NOTE if changing the bucket names, terraform will attempt to delete the existing buckets and all objects inside, so be careful and read terraform plan on what will be destroyed
+<br />
 
-# Update values in module
+Go into the directory with the `main.tf` and `terraform.tfstate` to run the terraform destroy command.
+
+## Update values in module
+
+To update values after deployed, just change values in main.tf to new values you want. Example changing the policy, role name, or bucket names. Changing bucket name will have terraform destroy old buckets and everything in it and create a new bucket, this will result of losing all objects in the s3 bucket. 
+
+<br /> 
+Example bellow will update the bucket names.
+
 Original:
+
 ```json
 provider "azurerm" {
   # Configuration options
@@ -65,7 +72,13 @@ output "storage_account_secondary_connection_string" {
 }
 
 ```
+
+
+
+<br />
+
 Update:
+
 ```json
 provider "azurerm" {
   # Configuration options
@@ -115,14 +128,27 @@ output "storage_account_secondary_connection_string" {
 }
 
 ```
-# Initialize the Directory
+
+
+
+<br />
+
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AZURE provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AZURE provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
+<br />
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
@@ -151,12 +177,25 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 $ 
 ```
-# Terraform Plan
-The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here][terraform-plan]
+
+
+
+<br />
+
+## Terraform Plan
+
+The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/plan)
+
 ```sh
 terraform plan
 ```
+
+
+
+<br />
+
 Example:
+
 ```sh
 $ terraform plan
 module.bucket.azurerm_resource_group.resource_group[0]: Refreshing state... [id=/subscriptions/df95b436-de1f-4c2a-96d9-b4801b1e2209/resourceGroups/telestream-cloud-port-dev-resource-group]
@@ -232,12 +271,25 @@ Changes to Outputs:
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
 $
 ```
-# Create Infrastructure
-The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here][terraform-apply]
+
+
+
+<br />
+
+## Create Infrastructure
+
+The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/apply)
+
 ```sh
 terraform apply
 ```
+
+
+
+<br />
+
 Example:
+
 ```sh
 $ terraform apply
 module.bucket.azurerm_resource_group.resource_group[0]: Refreshing state... [id=/subscriptions/df95b436-de1f-4c2a-96d9-b4801b1e2209/resourceGroups/telestream-cloud-port-dev-resource-group]

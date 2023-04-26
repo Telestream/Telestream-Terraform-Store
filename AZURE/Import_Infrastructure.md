@@ -1,24 +1,34 @@
-# How to Import Current Infrastructure
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-apply]:https://developer.hashicorp.com/terraform/cli/commands/apply
-[terraform-import]:https://developer.hashicorp.com/terraform/cli/commands/import
+# How to Import Current Infrastructure AZURE
+
 
 # Table of Contents
 1. [Requirements](README.md)
 2. [Initialize the Directory](#initialize-the-directory)
-3. [Update Module](#update-terraform-module-to-use-existing-resouce-name-to-be-imported)
-4. [How to Import Bucket](#how-to-import-bucket)
+3. [Update Terraform Module to use Existing Resource Name to be Imported](#update-terraform-module-to-use-existing-resource-name-to-be-imported)
+4. [How to Import Storage container](#how-to-import-storage-container)
 6. [How to Import Resource Group](#how-to-import-resource-group)
 7. [How to Import Storage Account](#how-to-import-storage-account)
 
-# Initialize the Directory
+<br />
+
+Go into the directory with the `main.tf`
+
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AZURE provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AZURE provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
+<br />
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
@@ -49,7 +59,15 @@ $
 ```
 
 
-# Update Terraform Module to use Existing Resource Name to be Imported
+
+<br />
+
+## Update Terraform Module to use Existing Resource Name to be Imported
+
+Copy the module in [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples) directory that fits your requirements. Example module in examples will be the  [create_storeage_container_and_resource_group](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples/create_storage_container_and_resource_group) module
+
+For all resources that you want to import to be controlled by terraform, update the `main.tf` file with their existing names instead of new unique names.
+
 ```json
 provider "azurerm" {
   # Configuration options
@@ -99,7 +117,13 @@ output "storage_account_secondary_connection_string" {
 }
 
 ```
+
+
+
+<br />
+
 Example
+
 ```json
 provider "azurerm" {
   # Configuration options
@@ -151,13 +175,26 @@ output "storage_account_secondary_connection_string" {
 }
 ```
 
-# How to Import Bucket
-Storage Containers can be imported using the resource id. Terraform can import existing infrastructure resources. This functionality lets you bring existing resources under Terraform management. Terraform documentation can be found [here][terraform-import]
-* Storage Containers can be imported using the resource id
+
+
+<br />
+
+## Terraform Import
+
+Terraform can import existing infrastructure resources. This functionality lets you bring existing resources under Terraform management. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/import) This is done by using the command terraform import
+
+## How to Import Storage container
+
+- Storage Containers can be imported using the resource id
+
 ```sh
 terraform import  module.bucket.azurerm_storage_container.storage_container[0] <storage_container_resouce_id>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import  module.bucket.azurerm_storage_container.storage_container[0] https://tcaccount.blob.core.windows.net/fake-bucket-name
 module.bucket.azurerm_storage_container.storage_container[0]: Importing from ID "https://tcaccount.blob.core.windows.net/fake-bucket-name"...
@@ -171,13 +208,24 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
 $ 
-``` 
-# How to Import Resource Group
+```
+
+
+
+<br />
+
+## How to Import Resource Group
+
 Resource Groups can be imported using the resource id
+
 ```sh
 terraform import module.bucket.azurerm_resource_group.resource_group[0] <resource_group_resouce_id>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import module.bucket.azurerm_resource_group.resource_group[0] /subscriptions/df95b436-de1f-4c2a-96d9-b4801b1e2209/resourceGroups/telestream-cloud-port-dev-resource-group
 module.bucket.azurerm_resource_group.resource_group[0]: Importing from ID "/subscriptions/df95b436-de1f-4c2a-96d9-b4801b1e2209/resourceGroups/telestream-cloud-port-dev-resource-group"...
@@ -191,13 +239,24 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
 $ 
-``` 
-# How to Import Storage Account
-* Storage Accounts can be imported using the resource id
+```
+
+
+
+<br />
+
+## How to Import Storage Account
+
+- Storage Accounts can be imported using the resource id
+
 ```sh
 terraform import module.bucket.azurerm_storage_account.storage_account[0] <storage_account_resource_id>
 ```
+
+
+
 Example
+
 ```sh
 $ terraform import module.bucket.azurerm_storage_account.storage_account[0] /subscriptions/df95b436-de1f-4c2a-96d9-b4801b1e2209/resourceGroups/telestream-cloud-port-dev-resource-group/providers/Microsoft.Storage/storageAccounts/tcaccount
 
@@ -212,9 +271,16 @@ The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
 
 $
-``` 
-# Terraform Apply
-The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes. After approval it will create infrastructure. Terraform documentation can be found [here][terraform-apply]
+```
+
+
+
+<br />
+
+## Terraform Apply
+
+The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes. After approval it will create infrastructure. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/apply)
+
 ```sh
 terraform apply
 ```

@@ -1,26 +1,83 @@
 
-# How to Destroy Infrastructure
-Terraform Build Infrastructure Documentation can be found [here][terraform-build-infrastructure]
+# How to Destroy Infrastructure AZURE
+Terraform Build Infrastructure Documentation can be found [here](https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build)
 
 # Table of Contents
 1. [Requirements](README.md)
 2. [Initialize the Directory](#initialize-the-directory)
 3. [Destroy Infrastructure](#destroy-infrastructure)
 
-[terraform-build-infrastructure]:https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-destroy]:https://developer.hashicorp.com/terraform/cli/commands/destroy
+Go into the directory with the `main.tf` and `terraform.tfstate` to run the terraform destroy command.
 
-# Initialize the Directory
+## Initialize the Directory
+
+When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
+
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the AZURE provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
-# Destroy Infrastructure
-The terraform destroy command destroys all of the resources being managed by the current working directory and workspace, using state data to determine which real world objects correspond to managed resources. Like terraform apply, it asks for confirmation before proceeding. Terraform documentation can be found [here][terraform-destroy]
+
+
+
+<br />
+
+Example:
+
+```sh
+$ terraform init
+Initializing modules...
+- bucket in github.com/Telestream/Telestream-Terraform-Store/AZURE/Bucket
+
+Initializing the backend...
+
+Initializing provider plugins...
+- Finding hashicorp/azurerm versions matching "3.47.0"...
+- Installing hashicorp/azurerm v3.47.0...
+- Installed hashicorp/azurerm v3.47.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+$ 
+```
+
+
+
+<br />
+
+```sh
+terraform init
+```
+
+
+
+## Destroy Infrastructure
+
+The terraform destroy command destroys all of the resources being managed by the current working directory and workspace, using state data to determine which real world objects correspond to managed resources. Like terraform apply, it asks for confirmation before proceeding. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/destroy)
+
 ```sh
 terraform destroy
 ```
+
+
+
+<br />
+
 Example:
+
 ```sh
 $ terraform destroy
 module.bucket.azurerm_resource_group.resource_group[0]: Refreshing state... [id=/subscriptions/df95b436-de1f-4c2a-96d9-b4801b1e2209/resourceGroups/telestream-cloud-port-dev-resource-group]
