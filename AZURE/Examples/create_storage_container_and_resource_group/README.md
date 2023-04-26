@@ -1,3 +1,5 @@
+# Terraform Module: create storage container and resource group
+This Terraform module creates one or more Azure Storage Containers based on the inputted bucket names. Each bucket name must be unique within a given storage account, every container must have a unique name. The module also creates an Storage account with primary/secondary access keys and primary/secondary connection string that have access to all the created Storage Containers with permissions required by the stores. Additionally, this module will cretae a new Azure resource group that the storage containers will be in.
 ## Requirements
 
 No requirements.
