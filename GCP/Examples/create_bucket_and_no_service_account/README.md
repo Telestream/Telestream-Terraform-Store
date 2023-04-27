@@ -1,3 +1,5 @@
+# Terraform Module: Create Bucket and No Service Account
+The Terraform module generates one or more GCP buckets based on the provided bucket names, but it does not create a service account.
 ## Requirements
 
 No requirements.

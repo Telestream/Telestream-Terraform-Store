@@ -1,3 +1,6 @@
+# Terraform Module: Create Buckets and Service Account No Keys
+The Terraform module generates one or more GCP buckets based on the specified bucket names. It also establishes a service account that has permission to access the Buckets, but doesn't produce any keys. This approach is useful if you prefer not to store the keys in the state file and instead generate them manually in the console.
+
 ## Requirements
 
 No requirements.

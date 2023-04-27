@@ -1,7 +1,6 @@
 provider "google" {
     credentials = file("<replace/path/to/credentials/file.json>")
 }
-//minium needed to create bucket
 module "bucket" {
     source          = "github.com/Telestream/Telestream-Terraform-Store/GCP/Bucket"
     bucket_names    = ["<replace_with_unique_name_of_bucket>"]

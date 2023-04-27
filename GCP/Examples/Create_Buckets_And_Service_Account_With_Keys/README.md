@@ -1,3 +1,6 @@
+# Terraform Module: Create Buckets and Service Account With Keys
+The Terraform module generates one or more GCP buckets based on the provided bucket names. It also creates a service account that has access to the Buckets, as well as HMAC Keys with access/secret.
+
 ## Requirements
 
 No requirements.

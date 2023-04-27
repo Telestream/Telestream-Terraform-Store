@@ -61,7 +61,7 @@ $
 
 ## Update Terraform Module to use Existing Resource Name to be Imported
 
-Copy the module in [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples)directory that fits your requirements. Example module in examples will be the [create_bucket_and_service_account](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples/create_bucket_and_service_account) module
+Copy the module in [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples)directory that fits your requirements. Example module in examples will be the [Create_Buckets_And_Service_Account_With_Keysand_service_account](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples/Create_Buckets_And_Service_Account_With_Keysand_service_account) module
 
 For all resources that you want to import to be controlled by terraform, update the `main.tf` file with their existing names instead of new unique names.
 

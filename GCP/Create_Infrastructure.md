@@ -14,7 +14,7 @@ Terraform Build Infrastructure Documentation can be found [here](https://develop
 
 ## Select Example module
 
-Pick an [Example](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples) module that best fits your requirements, the examples bellow will be using [create_bucket_and_service_account](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples/create_bucket_and_service_account).
+Pick an [Example](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples) module that best fits your requirements, the examples bellow will be using [Create_Buckets_And_Service_Account_With_Keysand_service_account](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/GCP/Examples/Create_Buckets_And_Service_Account_With_Keysand_service_account).
 
 ## Copy a module
 
