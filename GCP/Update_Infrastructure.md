@@ -1,33 +1,37 @@
-# How to Update Infrastructure
-Terraform Build Infrastructure Documentation can be found [here][terraform-build-infrastructure]
+# How to Update Infrastructure GCP
+# NOTE if changing the bucket names, terraform will attempt to delete the existing buckets and all objects inside, so be careful and read terraform plan on what will be destroyed
+
+Terraform Build Infrastructure Documentation can be found [here](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/google-cloud-platform-build)
 
 # Table of Contents
 1. [Requirements](README.md)
-3. [Replace values in module](#replace-values-in-module)
+3. [Update values in module](#update-values-in-module)
 4. [Initialize the Directory](#initialize-the-directory)
 5. [Terraform Plan](#terraform-plan)
 6. [Create Infrastructure](#create-infrastructure)
 
-[terraform-build-infrastructure]:https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/google-cloud-platform-build
-[terraform-init]:https://developer.hashicorp.com/terraform/cli/commands/init
-[terraform-plan]:https://developer.hashicorp.com/terraform/cli/commands/plan
-[terraform-apply]:https://developer.hashicorp.com/terraform/cli/commands/apply
-# NOTE if changing the bucket names, terraform will attempt to delete the existing buckets and all objects inside, so be careful and read terraform output on what will be destroyed
+<br />
 
-# Update values in module
+Go into the directory with the `main.tf` and `terraform.tfstate` to run the terraform destroy command.
+
+## Update values in module
+
+To update values after deployed, just change values in main.tf to new values you want. Example changing the policy, role name, or bucket names. Changing bucket name will have terraform destroy old buckets and everything in it and create a new bucket, this will result of losing all objects in the GCP bucket. 
+
+<br /> 
+Example bellow will update the GCP bucket names.
+
 Original:
+
 ```json
 provider "google" {
-    credentials = file("<replace/path/to/credentials/file.json>")
+    credentials = file("path/to/credentials/file.json")
 }
-//minium needed to create bucket
 module "bucket" {
     source          = "github.com/Telestream/Telestream-Terraform-Store/GCP/Bucket"
-    //enabled         = true
     bucket_names    = ["fake-bucket-name-1"]
-   // storage_class   = "STANDARD" 
     bucket_location = "US-EAST1"
-    project         = "cloud-engineering-123"
+    project         = "gcp-project-123"
     service_account = {
         account_id  = "tcloud-tf-dev-service"
     }
@@ -47,19 +51,20 @@ output "Secret_Key" {
 }
 
 ```
+
+
+
 Update:
+
 ```json
 provider "google" {
-    credentials = file("<replace/path/to/credentials/file.json>")
+    credentials = file("/Users/username/.config/gcloud/application_default_credentials.json")
 }
-//minium needed to create bucket
 module "bucket" {
     source          = "github.com/Telestream/Telestream-Terraform-Store/GCP/Bucket"
-    //enabled         = true
     bucket_names    = ["fake-bucket-name-1-new"]
-   // storage_class   = "STANDARD" 
     bucket_location = "US-EAST1"
-    project         = "cloud-engineering-123"
+    project         = "gcp-project-123"
     service_account = {
         account_id  = "tcloud-tf-dev-service"
     }
@@ -80,14 +85,25 @@ output "Secret_Key" {
 
 
 ```
-# Initialize the Directory
+
+
+
+<br />
+
+## Initialize the Directory
+
 When you create a new configuration — or check out an existing configuration from version control — you need to initialize the directory with terraform init.
 
-Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the aws provider. Terraform documentation can be found [here][terraform-init]
+Initializing a configuration directory downloads and installs the providers defined in the configuration, which in this case is the GCP provider. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/init)
+
 ```sh
 terraform init
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform init
 Initializing modules...
@@ -116,17 +132,28 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 $ 
 ```
-# Terraform Plan
-The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here][terraform-plan]
+
+
+
+<br />
+
+## Terraform Plan
+
+The terraform plan command creates an execution plan, which lets you preview the changes that Terraform plans to make to your infrastructure. The plan command alone does not actually carry out the proposed changes. You can use this command to check whether the proposed changes match what you expected before you apply the changes or share your changes with your team for broader review. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/plan)
+
 ```sh
 terraform plan
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform plan
 module.bucket.google_storage_bucket.bucket[0]: Refreshing state... [id=fake-bucket-name-1]
-module.bucket.google_service_account.service_account[0]: Refreshing state... [id=projects/cloud-engineering-123/serviceAccounts/tcloud-tf-dev-service@cloud-engineering-123.iam.gserviceaccount.com]
-module.bucket.google_storage_hmac_key.key[0]: Refreshing state... [id=projects/cloud-engineering-123/hmacKeys/GOOG1EC62JWZUXHHAQ3GRARQS4G2E3DASPOBYFAKEACCESSKEYID]
+module.bucket.google_service_account.service_account[0]: Refreshing state... [id=projects/gcp-project-123/serviceAccounts/tcloud-tf-dev-service@gcp-project-123.iam.gserviceaccount.com]
+module.bucket.google_storage_hmac_key.key[0]: Refreshing state... [id=projects/gcp-project-123/hmacKeys/GOOG1EC62JWZUXHHAQ3GRARQS4G2E3DASPOBYFAKEACCESSKEYID]
 module.bucket.google_storage_bucket_iam_binding.binding[0]: Refreshing state... [id=b/fake-bucket-name-1/roles/storage.admin]
 
 Note: Objects have changed outside of Terraform
@@ -190,18 +217,29 @@ Changes to Outputs:
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
 $ 
 ```
-# Create Infrastructure
-The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here][terraform-apply]
+
+
+
+<br />
+
+## Create Infrastructure
+
+The terraform apply command performs a plan just like terraform plan does, but then actually carries out the planned changes to each resource using the relevant infrastructure provider's API. It asks for confirmation from the user before making any changes, enter yes to approve. After approval it will create infrastructure. Terraform documentation can be found [here](https://developer.hashicorp.com/terraform/cli/commands/apply)
+
 ```sh
 terraform apply
 ```
+
+
+
 Example:
+
 ```sh
 $ terraform apply
-module.bucket.google_service_account.service_account[0]: Refreshing state... [id=projects/cloud-engineering-123/serviceAccounts/tcloud-tf-dev-service@cloud-engineering-123.iam.gserviceaccount.com]
+module.bucket.google_service_account.service_account[0]: Refreshing state... [id=projects/gcp-project-123/serviceAccounts/tcloud-tf-dev-service@gcp-project-123.iam.gserviceaccount.com]
 module.bucket.google_storage_bucket.bucket[0]: Refreshing state... [id=fake-bucket-name-1]
 module.bucket.google_storage_bucket_iam_binding.binding[0]: Refreshing state... [id=b/fake-bucket-name-1/roles/storage.admin]
-module.bucket.google_storage_hmac_key.key[0]: Refreshing state... [id=projects/cloud-engineering-123/hmacKeys/GOOG1EC62JWZUXHHAQ3GRARQS4G2E3DASPOBYFAKEACCESSKEYID]
+module.bucket.google_storage_hmac_key.key[0]: Refreshing state... [id=projects/gcp-project-123/hmacKeys/GOOG1EC62JWZUXHHAQ3GRARQS4G2E3DASPOBYFAKEACCESSKEYID]
 
 Note: Objects have changed outside of Terraform
 
@@ -278,7 +316,7 @@ Apply complete! Resources: 2 added, 0 changed, 2 destroyed.
 
 Outputs:
 
-Access_Key = "projects/cloud-engineering-123/hmacKeys/GOOG1EC62JWZUXHHAQ3GRARQS4G2E3DASPOBYFAKEACCESSKEYID"
+Access_Key = "projects/gcp-project-123/hmacKeys/GOOG1EC62JWZUXHHAQ3GRARQS4G2E3DASPOBYFAKEACCESSKEYID"
 Secret_Key = <sensitive>
 bucket_names = "fake-bucket-name-1-new"
 Locals-MBP:Store kevin.travers$ 
