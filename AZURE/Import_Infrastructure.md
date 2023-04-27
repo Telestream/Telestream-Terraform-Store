@@ -64,7 +64,7 @@ $
 
 ## Update Terraform Module to use Existing Resource Name to be Imported
 
-Copy the module in [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples) directory that fits your requirements. Example module in examples will be the  [create_storeage_container_and_resource_group](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples/create_storage_container_and_resource_group) module
+Copy the module in [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples) directory that fits your requirements. Example module in examples will be the  [Create_Storage_Containers_And_Resource_Group](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples/Create_Storage_Containers_And_Resource_Group) module
 
 For all resources that you want to import to be controlled by terraform, update the `main.tf` file with their existing names instead of new unique names.
 

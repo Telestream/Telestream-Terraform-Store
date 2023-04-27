@@ -14,7 +14,7 @@ Terraform Build Infrastructure Documentation can be found [here](https://develop
 
 ## Select Example module
 
-Pick an [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples) module that best fits your requirements, the examples bellow will be using [create_storeage_container_and_resource_group](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples/create_storage_container_and_resource_group) module
+Pick an [Examples](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples) module that best fits your requirements, the examples bellow will be using [Create_Storage_Containers_And_Resource_Group](https://github.com/Telestream/Telestream-Terraform-Store/tree/main/AZURE/Examples/Create_Storage_Containers_And_Resource_Group) module
 
 ## Copy a module
 
